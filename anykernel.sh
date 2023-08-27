@@ -25,29 +25,29 @@ ramdisk_compression=auto
 patch_vbmeta_flag=auto
 
 # import functions/variables and setup patching - see for reference (DO NOT REMOVE)
-# Use choice for use KSU or No
-tools/ak3-core.sh
+. tools/ak3-core.sh
+
+#mode for ksu or not
+
 case "$ZIPFILE" in
     *ksu*)
     ui_print " ";
-    ui_print " ";
-    ui_print " ================================== ";
-    ui_print " |    Anda Menggunakan Mode KSU   | ";
-    ui_print " |      Rootless use KernelSU     | ";
-    ui_print " ================================== ";
-    ui_print " ";
+    ui_print " ============================= ";
+    ui_print " | Anda Menggunakan KSU Mode | ";
+    ui_print " ============================= ";
     ui_print " ";
     rm Image;
     mv ksu/Image $home/Image;
     ;;
     *)
     ui_print " ";
-    ui_print " ";
-    ui_print " Tanpa Menggunakan Mode KSU ";
+    ui_print " ==>";
+    ui_print " ==> Tanpa Menggunakan Mode KSU ";
+    ui_print " ==>";
     ui_print " ";
     ;;
 esac
-
+    
 dump_boot # use split_boot to skip ramdisk unpack, e.g. for devices with init_boot ramdisk
 
 ########## CUSTOM START ##########
@@ -55,44 +55,6 @@ dump_boot # use split_boot to skip ramdisk unpack, e.g. for devices with init_bo
 BOOTMODE=false;
 ps | grep zygote | grep -v grep >/dev/null && BOOTMODE=true;
 $BOOTMODE || ps -A 2>/dev/null | grep zygote | grep -v grep >/dev/null && BOOTMODE=true;
-
-no_needed_kos='
-atmel_mxt_ts.ko
-cameralog.ko
-coresight-csr.ko
-coresight-cti.ko
-coresight-dummy.ko
-coresight-funnel.ko
-coresight-hwevent.ko
-coresight-remote-etm.ko
-coresight-replicator.ko
-coresight-stm.ko
-coresight-tgu.ko
-coresight-tmc.ko
-coresight-tpda.ko
-coresight-tpdm.ko
-coresight.ko
-cs35l41_dlkm.ko
-f_fs_ipc_log.ko
-focaltech_fts.ko
-icnss2.ko
-nt36xxx-i2c.ko
-nt36xxx-spi.ko
-qca_cld3_qca6750.ko
-qcom-cpufreq-hw-debug.ko
-qcom-cpufreq-hw.ko
-qcom_iommu_debug.ko
-qti_battery_debug.ko
-rdbg.ko
-spmi-glink-debug.ko
-spmi-pmic-arb-debug.ko
-stm_console.ko
-stm_core.ko
-stm_ftrace.ko
-stm_p_basic.ko
-stm_p_ost.ko
-synaptics_dsx.ko
-'
 
 extract_erofs() {
 	local img_file=$1
@@ -178,7 +140,7 @@ else
 
 	# Backup kernel and vendor_dlkm image
 	if $do_backup_flag; then
-		ui_print "- It looks like you are installing SaphireKernel Kernel for the first time."
+		ui_print "- It looks like you are installing Kernel for the first time."
 		ui_print "- Next will backup the kernel and vendor_dlkm partitions..."
 
 		build_prop=/system/build.prop
